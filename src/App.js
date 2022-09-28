@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Todolist from './components/Todolist';
+import { v4 } from 'uuid';
 
 function App() {
+  const initialState=JSON.parse(localStorage.getItem("todos"))||[];
   const[todo,setTodo]=useState("");
-  const[todoList,setTodoList]=useState([]);
+  const[todoList,setTodoList]=useState(initialState);
   const[editId,setEditId]=useState("");
+  useEffect(()=>{
+    localStorage.setItem("todos",JSON.stringify(todoList));
+  },[todoList])
 
   // ---------------------Tracking changes in input field------------------------
   const handleChange=(e)=>{
@@ -15,9 +20,9 @@ function App() {
   const addTodo=(e)=>{
       e.preventDefault();
       if(editId){
-        const editTodo=todoList.find((i)=>{return(i.name===editId)});
+        const editTodo=todoList.find((i)=>{return(i.id===editId)});
         const updateTodo=todoList.map((t)=>
-            t.name==editTodo.name?(t={name:todo,completed:false}):{name:t.name,completed:false}
+            t.id==editTodo.id?(t={id:v4(),name:todo,completed:false}):{id:v4(),name:t.name,completed:false}
         );
         setTodoList(updateTodo);
         setEditId("");
@@ -25,35 +30,45 @@ function App() {
         return;
       }
     if(todo!==""){
-      setTodoList([...todoList,{name:todo,completed:false}]);
+      setTodoList([...todoList,{id:v4(),name:todo,completed:false}]);
       setTodo("");
+     
    }
+   console.log(todoList);
   }
    // ---------------------Handling done or not------------------------
   const handleRead=(data)=>{
-    const readTodo=todoList.find((i)=>{return(i.name===data.name)});
-        const doneTodo=todoList.map((t)=>
-            t.name==readTodo.name?(t={name:t.name,completed:true}):{name:t.name,completed:false}
-        );
-        setTodoList(doneTodo);
-        console.log("done",doneTodo);
-        return;
+    setTodoList(todoList.map((item)=>{
+      if(item.id===data.id){
+        return{...item,completed:!item.completed}
+       
+      }
+      console.log(item.completed);
+      return item
+    }))
+    // const readTodo=todoList.find((i)=>{return(i.name===data.name)});
+    //     const doneTodo=todoList.map((t)=>
+    //         t.name==readTodo.name?(t={name:t.name,completed:true}):{name:t.name,completed:false}
+    //     );
+    //     setTodoList(doneTodo);
+    //     console.log("done",doneTodo);
+    //     return;
   }
 
    // ---------------------Handling delete------------------------
   const handleDelete=(data)=>{
    let remainingList=todoList.filter((e)=>{
-   return( e.name!=data.name)
+   return( e.id!=data.id)
   });
    setTodoList(remainingList)
     }
      // ---------------------handling edit------------------------
     const handleEdit=(data)=>{
       let editItem=todoList.find((e)=>{
-      return( e.name==data.name)
+      return( e.id===data.id)
      });
       setTodo(editItem.name);
-      setEditId(editItem.name);
+      setEditId(editItem.id);
 
        }
 
