@@ -4,7 +4,9 @@ import Todolist from './components/Todolist';
 import { v4 } from 'uuid';
 
 function App() {
-  const initialState=JSON.parse(localStorage.getItem("todos"))||[];
+  const storedTodo=JSON.parse(localStorage.getItem("todos"));
+  const initialState=storedTodo!=""?storedTodo:[];
+
   const[todo,setTodo]=useState("");
   const[todoList,setTodoList]=useState(initialState);
   const[editId,setEditId]=useState("");
@@ -16,6 +18,7 @@ function App() {
   const handleChange=(e)=>{
     setTodo(e.target.value);
   }
+  
    // ---------------------submitting value(both edit and add)------------------------
   const addTodo=(e)=>{
       e.preventDefault();
@@ -43,7 +46,7 @@ function App() {
         return{...item,completed:!item.completed}
        
       }
-      console.log(item.completed);
+   
       return item
     }))
     // const readTodo=todoList.find((i)=>{return(i.name===data.name)});
