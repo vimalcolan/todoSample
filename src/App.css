@@ -1,0 +1,39 @@
+.strike{
+  text-decoration: line-through;
+}
+.todo-wrapper{
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+.todo-form form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.todo-form input{
+  margin-bottom: 20px;
+  width: 100%;
+
+}
+.todo-form button{
+  width: 200px;
+
+}
+.list-wrapper{
+  background-color: #f2f2f2;
+  padding: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+.todo-text{
+  background-color: #ccc;
+  padding: 5px 10px;
+  border-radius:5px;
+  margin-bottom: 10px;
+}
+.todo-text p{
+  margin: 0;
+  font-weight: 600;
+}
